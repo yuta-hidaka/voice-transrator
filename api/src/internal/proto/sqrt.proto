@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package translator;
+
+option go_package = "voice-translator/internal/proto";
+
+
+message SqrtRequest {
+    int64 num = 1; // could be uint32
+}
+
+message SqrtResponse {
+    double ans = 1;
+}
+ 

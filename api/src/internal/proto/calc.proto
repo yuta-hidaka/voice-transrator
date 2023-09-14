@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package translator;
+
+option go_package = "voice-translator/internal/proto";
+
+import "sqrt.proto";
+
+message CalcRequest {
+    int64 one = 1;
+    int64 two = 2;
+}
+
+message CalcResponse {
+    int64 ans = 1;
+}
+
+message CalcCalcServerStreamRequest {
+    int64 num = 1;
+}
+
+message CalcCalcServerStreamResponse {
+    int64 ans = 1;
+}
+
+message CalcCalcClientStreamResponse {
+    float ans = 1;
+}
+
+service CalcService {
+    rpc Calc(CalcRequest) returns (CalcResponse);
+    rpc CalcServerStream(CalcCalcServerStreamRequest) returns (stream CalcCalcServerStreamResponse);
+    rpc CalcClientStream(stream CalcCalcServerStreamRequest) returns (CalcCalcClientStreamResponse);
+    rpc CalcBiDirectionStream(stream CalcCalcServerStreamRequest) returns (stream CalcCalcServerStreamResponse);
+    rpc Sqrt(SqrtRequest) returns (SqrtResponse);
+}
