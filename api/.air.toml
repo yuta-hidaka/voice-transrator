@@ -5,7 +5,7 @@ tmp_dir = "./tmp"
 [build]
 args_bin = []
 bin = "./tmp/main"
-cmd = "go mod tidy && protoc -I /app/internal/proto --go_opt=module=voice-translator --go_out=. --go-grpc_opt=module=voice-translator --go-grpc_out=. /app/internal/proto/*.proto && go build -o ./tmp /app/cmd/api/main.go"
+cmd = "go mod tidy && protoc -I /app/proto --go_opt=module=voice-translator --go_out=. --go-grpc_opt=module=voice-translator --go-grpc_out=. --js_out=import_style=commonjs,binary:/grpc-web-client --grpc-web_out=import_style=typescript,mode=grpcwebtext:/grpc-web-client /app/proto/*.proto && go build -o ./tmp /app/cmd/api/main.go"
 # cmd = "go mod tidy && go build -o ./tmp /app/cmd/api/main.go"
 delay = 1000
 exclude_dir = ["assets", "tmp", "vendor", "testdata"]

@@ -1,5 +1,7 @@
 <script lang="ts">
-    import { storage } from "../storage";
+    import { TranslatorServiceClient } from '@/grpc-web-client/TranslatorServiceClientPb';
+    import { HealthCheckRequest } from '@/grpc-web-client/translator_pb';
+    import { storage } from "@/storage";
 
     export let count: number;
     let successMessage: string | null = null;
@@ -30,6 +32,7 @@
         // do something with response here, not outside the function
         console.log(response);
     }
+
    async function stop() {
         const [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});
         console.log("send message stop");
@@ -37,6 +40,21 @@
        
         // do something with response here, not outside the function
         console.log(response);
+    }
+
+   async function healthCheck() {
+
+    var service = new TranslatorServiceClient('http://localhost:8080');
+
+    var request = new HealthCheckRequest();
+
+    service.healthCheck(request, {}, function(err, response) {
+        console.log(response);
+    });
+
+    alert('health check')
+
+
     }
 </script>
 
@@ -48,6 +66,7 @@
         <button on:click={save}>Save</button>
         <button  on:click={start}>Start</button>
         <button  on:click={stop}>Stop</button>
+        <button  on:click={healthCheck}>healthCheck</button>
         {#if successMessage}<span class="success">{successMessage}</span>{/if}
     </div>
 </div>

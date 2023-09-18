@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 	pb "voice-translator/internal/proto"
-	"voice-translator/internal/server"
+	"voice-translator/internal/server/translator"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -18,17 +18,14 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	log.Printf("listen on1: %v", addr)
 	s := grpc.NewServer()
-	log.Printf("listen on2: %v", addr)
-	pb.RegisterGreetServiceServer(s, &server.Server{})
-	log.Printf("listen on3: %v", addr)
-	pb.RegisterCalcServiceServer(s, &server.Server{})
-	log.Printf("listen on4: %v", addr)
+	pb.RegisterTranslatorServiceServer(s, &translator.Server{})
 
 	reflection.Register(s)
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+
+	log.Printf("listen on: %v", addr)
 }

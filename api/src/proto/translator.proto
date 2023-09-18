@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package translator;
+
+option go_package = "voice-translator/internal/proto";
+
+
+message TranslatorRequest {
+    int64 num = 1;
+}
+
+message TranslatorResponse {
+    double ans = 1;
+}
+
+message HealthCheckResponse {
+    string health = 1;
+}
+
+message HealthCheckRequest {
+}
+ 
+service TranslatorService {
+    rpc Translator(stream TranslatorRequest) returns (stream TranslatorResponse);
+    rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}

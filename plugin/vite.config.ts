@@ -1,5 +1,6 @@
 import { crx } from "@crxjs/vite-plugin";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import path from "path";
 import { defineConfig } from "vite";
 import manifest from "./src/manifest.config";
 
@@ -15,4 +16,9 @@ export default defineConfig({
             clientPort: 5173,
         },
     },
+    resolve: {
+        alias: {
+          "@": path.join( __dirname, "/src")
+        },
+      },
 });
