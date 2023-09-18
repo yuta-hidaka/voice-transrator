@@ -7,6 +7,7 @@ import (
 	"voice-translator/internal/server"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 var addr string = "0.0.0.0:8080"
@@ -24,6 +25,8 @@ func main() {
 	log.Printf("listen on3: %v", addr)
 	pb.RegisterCalcServiceServer(s, &server.Server{})
 	log.Printf("listen on4: %v", addr)
+
+	reflection.Register(s)
 
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
