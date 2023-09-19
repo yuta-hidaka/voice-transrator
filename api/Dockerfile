@@ -1,7 +1,7 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
 
 # Start from golang:1.12-alpine base image
-FROM golang:1.21.0-alpine
+FROM golang:1.21.1-alpine3.18
 
 # The latest alpine images don't have some tools like (`git` and `bash`).
 # Adding git, bash and openssh to the image
@@ -24,7 +24,7 @@ RUN go install github.com/cosmtrek/air@v1.29.0 && \
     go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2 && \
     go install github.com/ktr0731/evans@v0.10.11
 
-RUN npm install -g @bazel/bazelisk
+# RUN npm install -g @bazel/bazelisk google-protobuf protoc-gen-js grpc-tools grpc_tools_node_protoc_ts
     
 # RUN npm install -g @bufbuild/buf
 
