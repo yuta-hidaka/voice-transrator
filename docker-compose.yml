@@ -11,4 +11,4 @@ services:
     restart: unless-stopped
     volumes:
       - ./api/src:/app
-      - ./plugin/src/grpc-web-client:/grpc-web-client
+      - ./plugin/src/proto:/proto

@@ -13,41 +13,6 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-// package main
-
-// import (
-//   "context"
-//   "flag"
-//   "net/http"
-
-//   "github.com/golang/glog"
-//   "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-//   "google.golang.org/grpc"
-//   "google.golang.org/grpc/credentials/insecure"
-
-//   gw "github.com/yourorg/yourrepo/proto/gen/go/your/service/v1/your_service"  // Update
-// )
-
-// var addr string = "0.0.0.0:8080"
-
-// func main() {
-// 	lis, err := net.Listen("tcp", addr)
-// 	if err != nil {
-// 		log.Fatalf("failed to listen: %v", err)
-// 	}
-
-// 	s := grpc.NewServer()
-// 	pb.RegisterTranslatorServiceServer(s, &translator.Server{})
-
-// 	reflection.Register(s)
-
-// 	if err := s.Serve(lis); err != nil {
-// 		log.Fatalf("failed to serve: %v", err)
-// 	}
-
-// 	log.Printf("listen on: %v", addr)
-// }
-
 // Update
 
 var (

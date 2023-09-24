@@ -19,39 +19,18 @@ RUN apk update && apk upgrade && apk add --no-cache \
     zip \
     npm
 
-RUN go install github.com/cosmtrek/air@v1.29.0 && \
-    go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0 && \
-    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2 && \
+RUN go install github.com/cosmtrek/air@latest && \
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@latest && \
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest && \
     go install github.com/ktr0731/evans@v0.10.11
 
-# RUN npm install -g @bazel/bazelisk google-protobuf protoc-gen-js grpc-tools grpc_tools_node_protoc_ts
-    
-# RUN npm install -g @bufbuild/buf
+RUN go install \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest \
+    github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 
-# RUN npm install -g protoc-gen-js
+RUN npm install -g @protobuf-ts/plugin
 
-# RUN wget https://github.com/protocolbuffers/protobuf-javascript/releases/download/v3.21.2/protobuf-javascript-3.21.2-linux-aarch_64.tar.gz
-# RUN tar -xvf protobuf-javascript-3.21.2-linux-aarch_64.tar.gz
-# RUN cp bin/protoc /usr/local/bin/protoc
-# RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.bashrc" SHELL="$(which bash)" bash -
-
-# ENV PNPM_HOME=/usr/local/bin
-
-# RUN npm install -g pnpm 
-
-# RUN pnpm setup --force
-
-# RUN npm install google-protobuf
-
-# RUN npm i -g protoc-gen-js grpc-tools google-protobuf
-
-# RUN wget https://github.com/protocolbuffers/protobuf-javascript/releases/download/v3.21.2/protobuf-javascript-3.21.2-linux-aarch_64.tar.gz
-
-
-RUN cd /tmp && wget https://github.com/grpc/grpc-web/archive/refs/tags/1.4.2.tar.gz && \
-    tar -xvf 1.4.2.tar.gz && \
-    cd grpc-web-1.4.2 && \
-    make install-plugin
+RUN mkdir /proto
 
 RUN export PATH="$PATH:$(go env GOPATH)/bin"
 

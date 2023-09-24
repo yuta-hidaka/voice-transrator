@@ -1,7 +1,8 @@
 <script lang="ts">
     import { storage } from "@/storage";
-    import { TranslatorServiceClient } from '../proto/v1/translator.client';
-    
+    import { GrpcWebFetchTransport } from "@protobuf-ts/grpcweb-transport";
+    import { TranslatorServiceClient } from './proto/v1/translator.client';
+
     export let count: number;
     export let err: any;
     export let resp: any;
@@ -44,12 +45,12 @@
     }
 
    async function healthCheck() {
-
-    var client = new TranslatorServiceClient(
-        'http://localhost:8080',
-    );
-        
     try {
+
+    const transport = new GrpcWebFetchTransport({
+        baseUrl: "http://localhost:8080"
+    });
+    const client = new TranslatorServiceClient(transport);
         client.healthCheck({}, (err, response) => {
             err = err;
             resp = response;
@@ -57,6 +58,7 @@
             console.log("err: ", err)
         })
     } catch (error) {
+        console.log("error: ", error)
         err = error;
     }
     }
