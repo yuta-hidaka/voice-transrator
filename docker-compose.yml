@@ -12,3 +12,10 @@ services:
     volumes:
       - ./api/src:/app
       - ./plugin/src/proto:/proto
+  # nginx:
+  #   image: nginx:1.25.2-alpine
+  #   ports:
+  #     - 80:80
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./nginx/default.conf:/etc/nginx/default.conf:ro

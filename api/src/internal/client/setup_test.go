@@ -1,3 +1,3 @@
 package client_test
 
-var addr string = "localhost:8080"
+var addr string = "localhost:8081"

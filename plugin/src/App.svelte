@@ -48,10 +48,15 @@
     try {
 
     const transport = new GrpcWebFetchTransport({
-        baseUrl: "http://localhost:8080"
+        baseUrl: "http://localhost:8080",
     });
+
+    console.log('hello')
+    console.log('transport: ', transport)
+
     const client = new TranslatorServiceClient(transport);
-        client.healthCheck({}, (err, response) => {
+    // client.healthCheck.name
+        client.healthCheck(1233, (err, response) => {
             err = err;
             resp = response;
             console.log("response: ", response)

@@ -1,0 +1,66 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "translator.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "TranslatorService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "translatorHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "health": {
+          "type": "string"
+        }
+      }
+    },
+    "translatorTranslatorResponse": {
+      "type": "object",
+      "properties": {
+        "ans": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    }
+  }
+}

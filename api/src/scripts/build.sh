@@ -19,6 +19,11 @@ PROTOC_PARAMS=(
     --grpc-gateway_opt=logtostderr=true
     --grpc-gateway_opt=paths=source_relative
     --grpc-gateway_opt=generate_unbound_methods=true
+    # gate way ts
+    --grpc-gateway-ts_out=ts_import_roots=$(pwd),ts_import_root_aliases=base:/proto
+    # open API
+    # --openapiv2_out ./internal/proto/openapi \
+    # --openapiv2_opt logtostderr=true \
     # target
     /app/proto/v1/*.proto
 )
@@ -30,4 +35,5 @@ echo "generating client gropc..."
 protoc --ts_out=/ --proto_path /app /app/proto/v1/*.proto
 
 echo "building go binary..."
-# go build -o ./tmp /app/cmd/api/main.go
+
+go build -o ./tmp /app/cmd/api/main.go
