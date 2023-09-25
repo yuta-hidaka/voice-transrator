@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { TranslatorService } from '@/proto/translator.pb';
     import { storage } from "@/storage";
-    import { TranslatorServiceClient } from '../proto/v1/translator.client';
-    
+
     export let count: number;
     export let err: any;
     export let resp: any;
@@ -44,22 +44,15 @@
     }
 
    async function healthCheck() {
+    // const transport = new GrpcWebFetchTransport({
+    //     baseUrl: 'http://localhost:8080',
+    // });
+    // const client = new TranslatorService(transport);
+    const resp = await TranslatorService.HealthCheck({},{ pathPrefix: "http://localhost:8080" })
+    console.log("resp: ", resp)
+    
+    }
 
-    var client = new TranslatorServiceClient(
-        'http://localhost:8080',
-    );
-        
-    try {
-        client.healthCheck({}, (err, response) => {
-            err = err;
-            resp = response;
-            console.log("response: ", response)
-            console.log("err: ", err)
-        })
-    } catch (error) {
-        err = error;
-    }
-    }
 </script>
 
 <div class="container">
