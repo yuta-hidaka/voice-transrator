@@ -19,8 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TranslatorService_Translator_FullMethodName  = "/translator.TranslatorService/Translator"
-	TranslatorService_HealthCheck_FullMethodName = "/translator.TranslatorService/HealthCheck"
+	TranslatorService_Translator_FullMethodName        = "/translator.TranslatorService/Translator"
+	TranslatorService_Translator2_FullMethodName       = "/translator.TranslatorService/Translator2"
+	TranslatorService_Translator3_FullMethodName       = "/translator.TranslatorService/Translator3"
+	TranslatorService_HealthCheck_FullMethodName       = "/translator.TranslatorService/HealthCheck"
+	TranslatorService_HealthCheck2_FullMethodName      = "/translator.TranslatorService/HealthCheck2"
+	TranslatorService_HealthCheckStream_FullMethodName = "/translator.TranslatorService/HealthCheckStream"
 )
 
 // TranslatorServiceClient is the client API for TranslatorService service.
@@ -28,7 +32,11 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TranslatorServiceClient interface {
 	Translator(ctx context.Context, opts ...grpc.CallOption) (TranslatorService_TranslatorClient, error)
+	Translator2(ctx context.Context, in *TranslatorRequest, opts ...grpc.CallOption) (TranslatorService_Translator2Client, error)
+	Translator3(ctx context.Context, opts ...grpc.CallOption) (TranslatorService_Translator3Client, error)
 	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
+	HealthCheck2(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
+	HealthCheckStream(ctx context.Context, opts ...grpc.CallOption) (TranslatorService_HealthCheckStreamClient, error)
 }
 
 type translatorServiceClient struct {
@@ -70,6 +78,72 @@ func (x *translatorServiceTranslatorClient) Recv() (*TranslatorResponse, error) 
 	return m, nil
 }
 
+func (c *translatorServiceClient) Translator2(ctx context.Context, in *TranslatorRequest, opts ...grpc.CallOption) (TranslatorService_Translator2Client, error) {
+	stream, err := c.cc.NewStream(ctx, &TranslatorService_ServiceDesc.Streams[1], TranslatorService_Translator2_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &translatorServiceTranslator2Client{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type TranslatorService_Translator2Client interface {
+	Recv() (*TranslatorResponse, error)
+	grpc.ClientStream
+}
+
+type translatorServiceTranslator2Client struct {
+	grpc.ClientStream
+}
+
+func (x *translatorServiceTranslator2Client) Recv() (*TranslatorResponse, error) {
+	m := new(TranslatorResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *translatorServiceClient) Translator3(ctx context.Context, opts ...grpc.CallOption) (TranslatorService_Translator3Client, error) {
+	stream, err := c.cc.NewStream(ctx, &TranslatorService_ServiceDesc.Streams[2], TranslatorService_Translator3_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &translatorServiceTranslator3Client{stream}
+	return x, nil
+}
+
+type TranslatorService_Translator3Client interface {
+	Send(*TranslatorRequest) error
+	CloseAndRecv() (*TranslatorResponse, error)
+	grpc.ClientStream
+}
+
+type translatorServiceTranslator3Client struct {
+	grpc.ClientStream
+}
+
+func (x *translatorServiceTranslator3Client) Send(m *TranslatorRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *translatorServiceTranslator3Client) CloseAndRecv() (*TranslatorResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(TranslatorResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func (c *translatorServiceClient) HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
 	out := new(HealthCheckResponse)
 	err := c.cc.Invoke(ctx, TranslatorService_HealthCheck_FullMethodName, in, out, opts...)
@@ -79,12 +153,56 @@ func (c *translatorServiceClient) HealthCheck(ctx context.Context, in *HealthChe
 	return out, nil
 }
 
+func (c *translatorServiceClient) HealthCheck2(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, TranslatorService_HealthCheck2_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *translatorServiceClient) HealthCheckStream(ctx context.Context, opts ...grpc.CallOption) (TranslatorService_HealthCheckStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &TranslatorService_ServiceDesc.Streams[3], TranslatorService_HealthCheckStream_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &translatorServiceHealthCheckStreamClient{stream}
+	return x, nil
+}
+
+type TranslatorService_HealthCheckStreamClient interface {
+	Send(*HealthCheckRequest) error
+	Recv() (*HealthCheckResponse, error)
+	grpc.ClientStream
+}
+
+type translatorServiceHealthCheckStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *translatorServiceHealthCheckStreamClient) Send(m *HealthCheckRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *translatorServiceHealthCheckStreamClient) Recv() (*HealthCheckResponse, error) {
+	m := new(HealthCheckResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TranslatorServiceServer is the server API for TranslatorService service.
 // All implementations must embed UnimplementedTranslatorServiceServer
 // for forward compatibility
 type TranslatorServiceServer interface {
 	Translator(TranslatorService_TranslatorServer) error
+	Translator2(*TranslatorRequest, TranslatorService_Translator2Server) error
+	Translator3(TranslatorService_Translator3Server) error
 	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
+	HealthCheck2(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
+	HealthCheckStream(TranslatorService_HealthCheckStreamServer) error
 	mustEmbedUnimplementedTranslatorServiceServer()
 }
 
@@ -95,8 +213,20 @@ type UnimplementedTranslatorServiceServer struct {
 func (UnimplementedTranslatorServiceServer) Translator(TranslatorService_TranslatorServer) error {
 	return status.Errorf(codes.Unimplemented, "method Translator not implemented")
 }
+func (UnimplementedTranslatorServiceServer) Translator2(*TranslatorRequest, TranslatorService_Translator2Server) error {
+	return status.Errorf(codes.Unimplemented, "method Translator2 not implemented")
+}
+func (UnimplementedTranslatorServiceServer) Translator3(TranslatorService_Translator3Server) error {
+	return status.Errorf(codes.Unimplemented, "method Translator3 not implemented")
+}
 func (UnimplementedTranslatorServiceServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
+func (UnimplementedTranslatorServiceServer) HealthCheck2(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck2 not implemented")
+}
+func (UnimplementedTranslatorServiceServer) HealthCheckStream(TranslatorService_HealthCheckStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method HealthCheckStream not implemented")
 }
 func (UnimplementedTranslatorServiceServer) mustEmbedUnimplementedTranslatorServiceServer() {}
 
@@ -137,6 +267,53 @@ func (x *translatorServiceTranslatorServer) Recv() (*TranslatorRequest, error) {
 	return m, nil
 }
 
+func _TranslatorService_Translator2_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(TranslatorRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(TranslatorServiceServer).Translator2(m, &translatorServiceTranslator2Server{stream})
+}
+
+type TranslatorService_Translator2Server interface {
+	Send(*TranslatorResponse) error
+	grpc.ServerStream
+}
+
+type translatorServiceTranslator2Server struct {
+	grpc.ServerStream
+}
+
+func (x *translatorServiceTranslator2Server) Send(m *TranslatorResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _TranslatorService_Translator3_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TranslatorServiceServer).Translator3(&translatorServiceTranslator3Server{stream})
+}
+
+type TranslatorService_Translator3Server interface {
+	SendAndClose(*TranslatorResponse) error
+	Recv() (*TranslatorRequest, error)
+	grpc.ServerStream
+}
+
+type translatorServiceTranslator3Server struct {
+	grpc.ServerStream
+}
+
+func (x *translatorServiceTranslator3Server) SendAndClose(m *TranslatorResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *translatorServiceTranslator3Server) Recv() (*TranslatorRequest, error) {
+	m := new(TranslatorRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func _TranslatorService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HealthCheckRequest)
 	if err := dec(in); err != nil {
@@ -155,6 +332,50 @@ func _TranslatorService_HealthCheck_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TranslatorService_HealthCheck2_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TranslatorServiceServer).HealthCheck2(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TranslatorService_HealthCheck2_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TranslatorServiceServer).HealthCheck2(ctx, req.(*HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TranslatorService_HealthCheckStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(TranslatorServiceServer).HealthCheckStream(&translatorServiceHealthCheckStreamServer{stream})
+}
+
+type TranslatorService_HealthCheckStreamServer interface {
+	Send(*HealthCheckResponse) error
+	Recv() (*HealthCheckRequest, error)
+	grpc.ServerStream
+}
+
+type translatorServiceHealthCheckStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *translatorServiceHealthCheckStreamServer) Send(m *HealthCheckResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *translatorServiceHealthCheckStreamServer) Recv() (*HealthCheckRequest, error) {
+	m := new(HealthCheckRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // TranslatorService_ServiceDesc is the grpc.ServiceDesc for TranslatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,11 +387,31 @@ var TranslatorService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "HealthCheck",
 			Handler:    _TranslatorService_HealthCheck_Handler,
 		},
+		{
+			MethodName: "HealthCheck2",
+			Handler:    _TranslatorService_HealthCheck2_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Translator",
 			Handler:       _TranslatorService_Translator_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Translator2",
+			Handler:       _TranslatorService_Translator2_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "Translator3",
+			Handler:       _TranslatorService_Translator3_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "HealthCheckStream",
+			Handler:       _TranslatorService_HealthCheckStream_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

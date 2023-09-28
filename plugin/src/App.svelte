@@ -43,13 +43,22 @@
         console.log(response);
     }
 
-   async function healthCheck() {
+    async function healthCheck() {
     // const transport = new GrpcWebFetchTransport({
     //     baseUrl: 'http://localhost:8080',
     // });
     // const client = new TranslatorService(transport);
     const resp = await TranslatorService.HealthCheck({},{ pathPrefix: "http://localhost:8080" })
     console.log("resp: ", resp)
+    
+    }
+
+   async function healthCheckStream() {
+    // const transport = new GrpcWebFetchTransport({
+    //     baseUrl: 'http://localhost:8080',
+    // });
+    // const client = new TranslatorService(transport);
+    // const resp = await TranslatorService.HealthCheck
     
     }
 

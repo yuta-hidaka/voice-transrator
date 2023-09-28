@@ -2,7 +2,7 @@
 
 echo "building..."
 
-go mod tidy
+# go mod tidy
 
 echo "generating server gropc..."
 
@@ -36,4 +36,4 @@ protoc "${PROTOC_PARAMS[@]}"
 
 echo "building go binary..."
 
-go build -o ./tmp /app/cmd/api/main.go
+# go build -o ./tmp /app/cmd/api/main.go

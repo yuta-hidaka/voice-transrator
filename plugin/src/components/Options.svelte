@@ -24,6 +24,7 @@
             }, 1500);
         });
     }
+    
     async function start() {
         console.log(chrome.tabs);
         const [tab] = await chrome.tabs.query({active: true, lastFocusedWindow: true});

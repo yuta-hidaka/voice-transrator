@@ -3,6 +3,7 @@
 // https://developer.chrome.com/docs/extensions/mv3/content_scripts/
 
 // Some global styles on the page
+import { TranslatorService } from '@/proto/translator.pb';
 import "./styles.css";
 
 // Some JS on the page
@@ -21,21 +22,35 @@ function stopRecording() {
     console.log("recordStream stop")
 }
 
+async function healthCheck() {
+    const resp = await TranslatorService.HealthCheck({}, { pathPrefix: "http://localhost:8080" })
+    console.log("resp: ", resp)
+}
+
 async function recordStream() {
     const stream = await navigator.mediaDevices.getUserMedia({
         video: false,
         audio: true,
     })
 
+    const resp = await TranslatorService.HealthCheck({}, { pathPrefix: "http://localhost:8080" })
+    console.log("resp: ", resp)
+
     recorder = new MediaRecorder(stream)
 
     let chunks: Blob[] = []
 
-    recorder.ondataavailable = event => {
+    recorder.ondataavailable = async event => {
         if (event.data.size > 0) {
-            chunks.push(event.data)
-            console.log(chunks.length)
-            console.log(chunks)
+            console.log(await event.data)
+            // console.log(await event.data.text())
+            const buf = await event.data.arrayBuffer()
+            const stream = await event.data.stream()
+            console.log("buf ====> ", buf)
+            // console.log(await event.data.arrayBuffer())
+            // chunks.push()
+            // console.log(chunks.length)
+            // console.log(chunks)
         }
     }
 
@@ -49,6 +64,7 @@ async function recordStream() {
 
     recorder.start(200)
     console.log("recordStream start")
+    healthCheck()
 }
 
 function init() {
