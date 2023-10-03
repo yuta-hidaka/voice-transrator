@@ -18,16 +18,14 @@ export type HealthCheckResponse = {
 }
 
 export type HealthCheckRequest = {
+  hello?: string
 }
 
 export class TranslatorService {
-  static Translator2(req: TranslatorRequest, entityNotifier?: fm.NotifyStreamEntityArrival<TranslatorResponse>, initReq?: fm.InitReq): Promise<void> {
-    return fm.fetchStreamingRequest<TranslatorRequest, TranslatorResponse>(`/translator.TranslatorService/Translator2`, entityNotifier, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
-  }
   static HealthCheck(req: HealthCheckRequest, initReq?: fm.InitReq): Promise<HealthCheckResponse> {
     return fm.fetchReq<HealthCheckRequest, HealthCheckResponse>(`/translator.TranslatorService/HealthCheck`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
-  static HealthCheck2(req: HealthCheckRequest, initReq?: fm.InitReq): Promise<HealthCheckResponse> {
-    return fm.fetchReq<HealthCheckRequest, HealthCheckResponse>(`/translator.TranslatorService/HealthCheck2`, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
+  static HealthCheckServerStream(req: HealthCheckRequest, entityNotifier?: fm.NotifyStreamEntityArrival<HealthCheckResponse>, initReq?: fm.InitReq): Promise<void> {
+    return fm.fetchStreamingRequest<HealthCheckRequest, HealthCheckResponse>(`/translator.TranslatorService/HealthCheckServerStream`, entityNotifier, {...initReq, method: "POST", body: JSON.stringify(req, fm.replacer)})
   }
 }

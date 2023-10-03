@@ -18,13 +18,13 @@ message HealthCheckResponse {
 }
 
 message HealthCheckRequest {
+    string hello = 1;
 }
  
 service TranslatorService {
     rpc Translator(stream TranslatorRequest) returns (stream TranslatorResponse);
-    rpc Translator2( TranslatorRequest) returns (stream TranslatorResponse);
-    rpc Translator3(stream TranslatorRequest) returns (TranslatorResponse);
     rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
-    rpc HealthCheck2(HealthCheckRequest) returns (HealthCheckResponse);
-    rpc HealthCheckStream(stream HealthCheckRequest) returns (stream HealthCheckResponse);
+    rpc HealthCheckServerStream(HealthCheckRequest) returns (stream HealthCheckResponse);
+    rpc HealthCheckClientStream(stream HealthCheckRequest) returns (HealthCheckResponse);
+    rpc HealthCheckBiDiStream(stream HealthCheckRequest) returns (stream HealthCheckResponse);
 }

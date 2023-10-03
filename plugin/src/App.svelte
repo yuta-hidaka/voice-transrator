@@ -53,13 +53,43 @@
     
     }
 
-   async function healthCheckStream() {
-    // const transport = new GrpcWebFetchTransport({
-    //     baseUrl: 'http://localhost:8080',
-    // });
-    // const client = new TranslatorService(transport);
-    // const resp = await TranslatorService.HealthCheck
     
+   let ws = null
+   async function healthCheckStream() {
+    ws = new WebSocket("ws://localhost:8080/translator.TranslatorService/HealthCheckBiDiStream?method=POST", ['Bearer', "token"])
+    ws.onopen = function() {
+        console.log('Connected')
+        // ws.send("Here's some text that the server is urgently awaiting!");
+        // console.log("send done")
+        
+    }
+    ws.onmessage = function(evt) {
+        console.log(evt)
+        console.log(evt.data)
+    }
+    
+    ws.onclose = function() {
+        console.log('Disconnected')
+    }
+    
+    ws.onerror = function(err) {
+        console.error('Socket encountered error: ', err, 'Closing socket')
+        ws.close()
+    }
+
+    }
+
+    async function sendMessage() {
+        if(ws) {
+            var enc = new TextEncoder(); // always utf-8
+            console.log("send message")
+            ws.send(JSON.stringify({hello: "hello"}));
+        }
+    }
+
+
+   async function close() {
+        if(ws)        ws.close()
     }
 
 </script>
@@ -73,6 +103,9 @@
         <button  on:click={start}>Start</button>
         <button  on:click={stop}>Stop</button>
         <button  on:click={healthCheck}>healthCheck</button>
+        <button  on:click={healthCheckStream}>healthCheckStream</button>
+        <button  on:click={close}>close ws</button>
+        <button  on:click={sendMessage}>send ws</button>
         <div>
             aaaaaaa
             {#if err}

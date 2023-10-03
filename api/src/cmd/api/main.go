@@ -10,6 +10,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/tmc/grpc-websocket-proxy/wsproxy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -51,7 +52,7 @@ func main() {
 
 	gwServer := &http.Server{
 		Addr:    ":8080",
-		Handler: CORS(gwmux),
+		Handler: CORS(wsproxy.WebsocketProxy(gwmux)),
 	}
 
 	log.Println("Serving gRPC-Gateway on http://0.0.0.0:8080")

@@ -18,25 +18,51 @@ func (s *Server) HealthCheck(_ context.Context, req *pb.HealthCheckRequest) (*pb
 	}, nil
 }
 
-func (s *Server) HealthCheckStream(stream pb.TranslatorService_HealthCheckStreamServer) error {
-	times := 0
+func (s *Server) HealthCheckClientStream(stream pb.TranslatorService_HealthCheckClientStreamServer) error {
+	cnt := 0
+	fmt.Println("hello111111")
 	for {
 		_, err := stream.Recv()
+		if err == io.EOF {
+			fmt.Println("eof")
+			return nil
+		}
+
+		fmt.Println("hello")
+
+		if err != nil {
+			fmt.Println("errors")
+			log.Fatal(err)
+			return err
+		}
+
+		cnt += 1
+		fmt.Println("hello")
+	}
+
+	return nil
+}
+
+func (s *Server) HealthCheckBiDiStream(stream pb.TranslatorService_HealthCheckBiDiStreamServer) error {
+	cnt := 0
+	for {
+		stream.Send(&pb.HealthCheckResponse{
+			Health: fmt.Sprintf("OK %d", cnt),
+		})
+
+		v, err := stream.Recv()
 		if err == io.EOF {
 			return nil
 		}
 
-		if err != nil {
-			log.Fatal(err)
-			return err
-		}
+		fmt.Println("my hello is ", v.Hello)
 
-		err = stream.Send(&pb.HealthCheckResponse{
-			Health: fmt.Sprintf("hello %v times of response", times),
-		})
 		if err != nil {
 			log.Fatal(err)
 			return err
 		}
+		cnt += 1
 	}
+
+	return nil
 }
